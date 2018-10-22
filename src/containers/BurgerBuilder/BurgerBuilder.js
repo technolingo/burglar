@@ -74,16 +74,19 @@ class BurgerBuilder extends Component {
     this.updatePurchaseState(updatedIngredients);
   }
 
+  // show order summary
   orderHandler = () => {
     this.setState({purchasing: true});
   }
 
+  // dismiss order summary
   abandonCartHandler = () => {
     this.setState({purchasing: false});
   }
 
+  // handle checkout
   checkOutHandler = () => {
-    
+
   }
 
   render () {
