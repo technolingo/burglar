@@ -1,0 +1,11 @@
+.capitalize {
+  text-transform: capitalize;
+}
+
+.centerAlign {
+  text-align: center;
+}
+
+.rightAlign {
+  text-align: right;
+}
