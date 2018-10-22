@@ -30,7 +30,7 @@ const orderSummary = (props) => {
       </ul>
       <p>Total price: ${props.totalPrice.toFixed(2)}</p>
       <p className={styles.centerAlign}>
-        <Button btnType="Success" clicked={null}>Proceed to Order</Button>
+        <Button btnType="Success" clicked={props.checkout}>Proceed to Order</Button>
       </p>
     </>
   );

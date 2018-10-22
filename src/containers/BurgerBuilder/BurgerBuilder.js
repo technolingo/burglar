@@ -86,7 +86,7 @@ class BurgerBuilder extends Component {
 
   // handle checkout
   checkOutHandler = () => {
-
+    alert('Checkout Complete!');
   }
 
   render () {
@@ -106,6 +106,7 @@ class BurgerBuilder extends Component {
             basePrice={BASE_PRICE}
             totalPrice={this.state.totalPrice}
             close={this.abandonCartHandler}
+            checkout={this.checkOutHandler}
           />
         </Modal>
         <Burger ingredients={this.state.ingredients} />
