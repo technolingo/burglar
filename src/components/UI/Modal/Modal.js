@@ -8,7 +8,9 @@ class Modal extends Component {
 
   shouldComponentUpdate = (nextProps, nextState) => {
     // only re-render this (& its children) when necessary
-    return nextProps.display !== this.props.display;
+    const condition1 = nextProps.display !== this.props.display;
+    const condition2 = nextProps.children !== this.props.children;
+    return condition1 || condition2;
   }
 
   render () {
