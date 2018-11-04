@@ -19,7 +19,12 @@ const BASE_PRICE = 4;
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: null,
+    ingredients: {
+      salad: 0,
+      bacon: 0,
+      cheese: 0,
+      meat: 0
+    },
     totalPrice: BASE_PRICE,
     purchasable: false,
     purchasing: false,
@@ -85,32 +90,14 @@ class BurgerBuilder extends Component {
 
   // handle checkout
   checkOutHandler = () => {
-    this.setState({loading: true});
-
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Zilong',
-        address: {
-          street: 'Baker St.',
-          city: 'Monstrocity',
-          zipCode: '00125',
-          country: 'Lojbania'
-        },
-        email: '1@0.com'
-      },
-      deliveryMethod: 'fastest'
-    }
-    axios.post('/orders.json', order)
-      .then(r => {
-        console.log(r);
-        this.setState({loading: false, purchasing: false});
-      })
-      .catch(e => {
-        console.log(e);
-        this.setState({loading: false, purchasing: false});
-      });
+    // let query = '';
+    // const ingParamArray = Object.keys(this.state.ingredients).map(ingKey => {
+    //   return ingKey + '=' + this.state.ingredients[ingKey];
+    // });
+    // if (ingParamArray.length) {
+    //   query = '?' + ingParamArray.join('&');
+    // }
+    // this.props.history.push('/checkout' + query);
   }
 
   componentDidMount = () => {
@@ -140,6 +127,7 @@ class BurgerBuilder extends Component {
     // only render ingredients-dependent components after
     // ingredients data have been downloaded from the database
     if (this.state.ingredients) {
+      console.log(this.state.ingredients);
       burger = (
         <>
         <Burger ingredients={this.state.ingredients} />
