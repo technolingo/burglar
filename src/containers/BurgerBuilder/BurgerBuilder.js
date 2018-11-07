@@ -90,14 +90,17 @@ class BurgerBuilder extends Component {
 
   // handle checkout
   checkOutHandler = () => {
-    // let query = '';
-    // const ingParamArray = Object.keys(this.state.ingredients).map(ingKey => {
-    //   return ingKey + '=' + this.state.ingredients[ingKey];
-    // });
-    // if (ingParamArray.length) {
-    //   query = '?' + ingParamArray.join('&');
-    // }
-    // this.props.history.push('/checkout' + query);
+    const queryParams = [];
+    for (let k in this.state.ingredients) {
+      queryParams.push(encodeURIComponent(k) + '=' + encodeURIComponent(this.state.ingredients[k]));
+    }
+    queryParams.push('price=' + this.state.totalPrice);
+    const queryString = '?' + queryParams.join('&');
+
+    this.props.history.push({
+      pathname: '/checkout',
+      search: queryString
+    });
   }
 
   componentDidMount = () => {
@@ -127,7 +130,6 @@ class BurgerBuilder extends Component {
     // only render ingredients-dependent components after
     // ingredients data have been downloaded from the database
     if (this.state.ingredients) {
-      console.log(this.state.ingredients);
       burger = (
         <>
         <Burger ingredients={this.state.ingredients} />
