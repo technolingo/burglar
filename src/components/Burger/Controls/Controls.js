@@ -19,7 +19,8 @@ const controls = (props) => (
       label={c.label}
       type={c.type}
       // 2 ways of passing the type parameter
-      removed={props.ingredRemoved}
+      //removed={props.ingredRemoved.bind(this, c.type)}
+      removed={() => props.ingredRemoved(c.type)}
       added={() => props.ingredAdded(c.type)}
       removeDisabled={props.disabledInfo[c.type]}
     />))}
