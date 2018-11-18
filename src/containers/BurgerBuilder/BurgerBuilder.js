@@ -150,8 +150,6 @@ class BurgerBuilder extends Component {
       />;
     }
 
-    console.log(this.props.ings);
-
     return (
       <>
         <Modal display={this.state.purchasing} close={this.abandonCartHandler}>
