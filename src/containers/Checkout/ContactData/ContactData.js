@@ -37,7 +37,7 @@ class ContactData extends Component {
         email: {
           elementType: 'input',
           elementAttributes: {
-            type: 'text',
+            type: 'email',
             placeholder: 'Email',
           },
           value: '',
@@ -192,8 +192,6 @@ class ContactData extends Component {
         config: this.state.orderForm[key]
       })
     }
-
-
 
     let billingData = (
       <>
