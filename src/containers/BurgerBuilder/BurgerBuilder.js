@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from '../../axios-orders';
 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Burger from '../../components/Burger/Burger';
 import Controls from '../../components/Burger/Controls/Controls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import axios from '../../axios-orders';
-import * as actionTypes from '../../store/actions';
+import * as actions from '../../store/actions';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 export const INGREDIENT_PRICES = {
@@ -21,9 +21,7 @@ export const BASE_PRICE = 4;
 
 class BurgerBuilder extends Component {
   state = {
-    purchasing: false,
-    loading: false,
-    error: false
+    purchasing: false
   };
 
   // show order summary
@@ -38,18 +36,14 @@ class BurgerBuilder extends Component {
 
   // handle checkout
   checkOutHandler = () => {
+    // re-set purchased to false to prevent redirect
+    this.props.onPurchaseInit();
+    
     this.props.history.push('/checkout');
   }
 
   componentDidMount = () => {
-    // axios.get('https://hungryburglar.firebaseio.com/ingredients.json')
-    //   .then(res => {
-    //     this.setState({ingredients: res.data});
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //     this.setState({error: true});
-    //   });
+    this.props.onInitializeIngredients();
   }
 
   render () {
@@ -61,10 +55,7 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
-    let burger = this.state.error ? <p>Ingredients Cannot Be Loaded.</p> : <Spinner />;
+    let burger = this.props.error ? <p>Ingredients Cannot Be Loaded.</p> : <Spinner />;
     // only render ingredients-dependent components after
     // ingredients data have been downloaded from the database
     if (this.props.ings) {
@@ -104,13 +95,16 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = state => ({
-  ings: state.ingredients,
-  total: state.totalPrice
+  ings: state.burgerBuilder.ingredients,
+  total: state.burgerBuilder.totalPrice,
+  error: state.burgerBuilder.fetchIngredientsFailed
 });
 
 const mapDispatchToProps = dispatch => ({
-  onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-  onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+  onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+  onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+  onInitializeIngredients: () => dispatch(actions.initializeIngredientsAsync()),
+  onPurchaseInit: () => dispatch(actions.purchaseInit())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
