@@ -95,6 +95,18 @@ class Auth extends Component {
     this.props.onAuth(this.state.loginFields.email.value, this.state.loginFields.password.value, this.state.signupMode);
   }
 
+  componentDidUpdate = () => {
+    if (this.props.isAuthenticated) {
+      const query = new URLSearchParams(this.props.location.search);
+      for (let param of query.entries()) {
+        if (param[0] === 'next') {
+          this.props.history.push(param[1]);
+          break;
+        }
+      } // for loop
+    } // auth check
+  } // componentDidUpdate
+
   render () {
     const formElements = [];
     for (let key in this.state.loginFields) {
@@ -135,7 +147,7 @@ class Auth extends Component {
           </Button>
         </>
     );
-    if (this.props.token) {
+    if (this.props.isAuthenticated) {
       authPage = (
         <>
           <p className={styles.Success}>Currently logged-in as {this.props.email}</p>
@@ -161,7 +173,7 @@ const mapStateToProps = state => ({
   loading: state.auth.loading,
   error: state.auth.error,
   // make sure email & token are stored and erased together
-  token: state.auth.token,
+  isAuthenticated: state.auth.token !== null,
   email: state.auth.email
 });
 

@@ -28,7 +28,7 @@ const controls = (props) => (
       className={styles.OrderButton}
       disabled={!props.purchasable}
       onClick={props.ordered.bind(this)}
-    >ORDER NOW</button>
+    >{props.isAuth ? 'ORDER NOW' : 'LOG IN TO CONTINUE'}</button>
   </div>
 );
 
