@@ -8,6 +8,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions';
+import { updateObject, isFormFieldValid } from '../../../utilities/utilities';
 
 class ContactData extends Component {
   state = {
@@ -116,46 +117,16 @@ class ContactData extends Component {
     formIsValid: false
   }
 
-  isFormFieldValid = (value, rules) => {
-    let isValid = true;
+  formElementChangedHandler = (event, fieldName) => {
+    const updatedFormElement = updateObject(this.state.orderForm[fieldName], {
+      value: event.target.value,
+      touched: true,
+      valid: isFormFieldValid(event.target.value, this.state.orderForm[fieldName].validation)
+    });
 
-    // skip elements that do not have validation rules
-    if (rules) {
-      if (rules.required) {
-        isValid = value.trim() !== '' && isValid;
-      }
-      if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid;
-      }
-      if (rules.maxLength) {
-        isValid = value.length <= rules.maxLength && isValid;
-      }
-      if (rules.email) {
-        // this is obviously an oversimplified example
-        isValid = value.includes('@') && isValid;
-      }
-    } // if rules
-
-    return isValid;
-  }
-
-
-  // set up two-way binding to both display and extract input value
-  formElementChangedHandler = (event, inputIdentifier) => {
-    const updatedOrderForm = {
-      ...this.state.orderForm
-    };
-    // clone this nested object deeply instead of creating a pointer
-    const updatedFormElement = {
-      ...updatedOrderForm[inputIdentifier]
-    };
-    // set the element value to user input value
-    updatedFormElement.value = event.target.value;
-    // start checking input validity
-    updatedFormElement.touched = true;
-    // custom form field validation
-    updatedFormElement.valid = this.isFormFieldValid(updatedFormElement.value, updatedFormElement.validation);
-    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [fieldName]: updatedFormElement
+    });
 
     // check form data's OVERALL validity
     let formIsValid = true;

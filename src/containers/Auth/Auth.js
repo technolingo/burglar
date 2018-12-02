@@ -6,6 +6,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions';
+import { updateObject, isFormFieldValid } from '../../utilities/utilities';
 
 class Auth extends Component {
   state = {
@@ -43,29 +44,6 @@ class Auth extends Component {
     signupMode: true
   }
 
-  isFormFieldValid = (value, rules) => {
-    let isValid = true;
-
-    // skip elements that do not have validation rules
-    if (rules) {
-      if (rules.required) {
-        isValid = value.trim() !== '' && isValid;
-      }
-      if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid;
-      }
-      if (rules.maxLength) {
-        isValid = value.length <= rules.maxLength && isValid;
-      }
-      if (rules.email) {
-        // this is obviously an oversimplified example
-        isValid = value.includes('@') && isValid;
-      }
-    } // if rules
-
-    return isValid;
-  }
-
   switchAuthModeHandler = () => {
     this.setState((prevState) => ({
       signupMode: !prevState.signupMode
@@ -78,15 +56,14 @@ class Auth extends Component {
 
   // set up two-way binding to both display and extract input value
   formElementChangedHandler = (event, fieldName) => {
-    const updatedLoginFields = {
-      ...this.state.loginFields,
-      [fieldName]: {
-        ...this.state.loginFields[fieldName],
+    const updatedLoginFields = updateObject(this.state.loginFields, {
+      [fieldName]: updateObject(this.state.loginFields[fieldName], {
         value: event.target.value,
-        valid: this.isFormFieldValid(event.target.value, this.state.loginFields[fieldName].validation),
+        valid: isFormFieldValid(event.target.value, this.state.loginFields[fieldName].validation),
         touched: true
-      }
-    };
+      })
+    });
+
     this.setState({loginFields: updatedLoginFields});
   }
 

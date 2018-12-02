@@ -20,7 +20,7 @@ const sideDrawer = (props) => {
         clicked={props.closed}
       />
 
-      <div className={classes.join(' ')}>
+      <div className={classes.join(' ')} onClick={props.closed}>
         <div className={styles.Logo}>
           <Logo />
         </div>

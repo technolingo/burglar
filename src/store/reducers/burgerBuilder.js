@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { BASE_PRICE, INGREDIENT_PRICES } from '../../containers/BurgerBuilder/BurgerBuilder';
-import { updateObject } from './utilities';
+import { updateObject } from '../../utilities/utilities';
 
 const initialState = {
   ingredients: null,
