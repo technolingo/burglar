@@ -16,12 +16,12 @@ export const purchaseBurgerStart = () => ({
   type: actionTypes.BURGER_PURCHASE_START
 });
 
-export const purchaseBurger = orderData => {
+export const purchaseBurger = (orderData, token) => {
   return dispatch => {
     // dispatch the above action to set loading to true
     dispatch(purchaseBurgerStart());
     // excute async code to save order data
-    axios.post('/orders.json', orderData)
+    axios.post('/orders.json?auth=' + token, orderData)
       .then(r => {
         dispatch(purchaseBurgerSuccess(r.data.name, orderData));
       })
@@ -49,11 +49,11 @@ export const fetchOrdersStart = () => ({
   type: actionTypes.FETCH_ORDERS_START
 });
 
-export const fetchOrders = orders => {
+export const fetchOrders = (token) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
 
-    axios.get('/orders.json')
+    axios.get('/orders.json?auth=' + token)
       .then(r => {
         const fetchedOrders = [];
         for (let key in r.data) {

@@ -72,6 +72,10 @@ class Auth extends Component {
     }));
   }
 
+  logOutHandler = () => {
+    this.props.onLogOut();
+  }
+
   // set up two-way binding to both display and extract input value
   formElementChangedHandler = (event, fieldName) => {
     const updatedLoginFields = {
@@ -116,8 +120,8 @@ class Auth extends Component {
       formFields = <Spinner />;
     }
 
-    return (
-      <div className={styles.Auth}>
+    let authPage = (
+      <>
         <p className={styles.Warning}>{this.props.error ? this.props.error.message : null}</p>
         <form onSubmit={this.formSubmitHandler}>
           {formFields}
@@ -129,6 +133,25 @@ class Auth extends Component {
             btnClass='Danger'>
             Switch to {this.state.signupMode ? 'Log-In' : 'Sign-Up'}
           </Button>
+        </>
+    );
+    if (this.props.email) {
+      authPage = (
+        <>
+          <p className={styles.Success}>Currently logged-in as {this.props.email}</p>
+          <Button
+            clicked={this.logOutHandler}
+            btnType='button'
+            btnClass='Danger'>
+            Log Out
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <div className={styles.Auth}>
+        {authPage}
       </div>
     );
   }
@@ -136,11 +159,13 @@ class Auth extends Component {
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,
-  error: state.auth.error
+  error: state.auth.error,
+  email: state.auth.email
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+  onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp)),
+  onLogOut: () => dispatch(actions.logOut())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
