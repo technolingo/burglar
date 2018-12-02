@@ -135,7 +135,7 @@ class Auth extends Component {
           </Button>
         </>
     );
-    if (this.props.email) {
+    if (this.props.token) {
       authPage = (
         <>
           <p className={styles.Success}>Currently logged-in as {this.props.email}</p>
@@ -160,6 +160,8 @@ class Auth extends Component {
 const mapStateToProps = state => ({
   loading: state.auth.loading,
   error: state.auth.error,
+  // make sure email & token are stored and erased together
+  token: state.auth.token,
   email: state.auth.email
 });
 
