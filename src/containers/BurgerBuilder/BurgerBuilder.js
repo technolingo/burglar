@@ -19,7 +19,7 @@ export const INGREDIENT_PRICES = {
 
 export const BASE_PRICE = 4;
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     purchasing: false
   };
